@@ -5,7 +5,6 @@ namespace Mus3d
 {
     public class PlayerInitializer : MonoBehaviour
     {
-        [SerializeField] GameObject m_hudPrefab;
         [SerializeField] GameObject m_weaponViewPrefab;
         [SerializeField] GameObject m_bloodFlashPrefab;
 
@@ -23,7 +22,6 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public void Run ()
         {
-            Instantiate (m_hudPrefab);
             Instantiate (m_bloodFlashPrefab);
 
             Weaponry.LoadAndInitialize ();

@@ -45,13 +45,16 @@ namespace Mus3d
 
             // Load up stuff
 
-            var pak = Instantiate (m_pak, transform);
-            var musicInitializer = pak.GetComponent<AudioInitializer> ();
+            var pak               = Instantiate (m_pak, transform);
+            var musicInitializer  = pak.GetComponent<AudioInitializer> ();
             var playerInitializer = pak.GetComponent<PlayerInitializer> ();
-            var enemyInitializer = pak.GetComponent<EnemyInitializer> ();
+            var enemyInitializer  = pak.GetComponent<EnemyInitializer> ();
+            var hudInitializer    = pak.GetComponent<HUDInitializer> ();
+
             musicInitializer.Run ();
             playerInitializer.Run ();
             enemyInitializer.Run ();
+            hudInitializer.Run ();
         }
     }
 }

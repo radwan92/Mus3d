@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Mus3d
 {
-    public class SpriteDigits : ScriptableObject
+    public class SpriteDigits : MonoBehaviour
     {
         [SerializeField] SpriteSheet m_digitsSpriteSheet;
 
