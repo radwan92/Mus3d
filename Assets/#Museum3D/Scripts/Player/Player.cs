@@ -13,7 +13,7 @@ namespace Mus3d
 
         public static Weapon.Class HeldWeaponClass { get { return m_weaponController.WeaponClass; } }
 
-        public static bool    IsDead    { get; private set; }
+        public static bool IsDead { get; private set; }
 
         static CharacterController  m_characterController;
         static WeaponController     m_weaponController;
