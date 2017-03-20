@@ -6,7 +6,7 @@ namespace Mus3d
     public class PlayerInitializer : MonoBehaviour
     {
         [SerializeField] GameObject m_weaponViewPrefab;
-        [SerializeField] GameObject m_bloodFlashPrefab;
+        [SerializeField] Material   m_bloodFlashMaterial;
 
         CharacterController m_characterController;
         WeaponController    m_weaponController;
@@ -22,8 +22,6 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public void Run ()
         {
-            Instantiate (m_bloodFlashPrefab);
-
             Weaponry.LoadAndInitialize ();
             Ammunition.Initialize ();
 
@@ -36,6 +34,7 @@ namespace Mus3d
             m_playerBodyTransform = m_characterController.transform;
             m_playerHeadTransform = Camera.main.transform;
 
+            InitializeBloodFlash ();
             InitializeWeaponView ();
             InitializeWeaponController ();
             InitializeMovementController ();
@@ -47,6 +46,13 @@ namespace Mus3d
         void InitializePlayer ()
         {
             Player.Initialize (m_characterController, m_weaponController, m_playerBodyTransform, m_playerHeadTransform);
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void InitializeBloodFlash ()
+        {
+            var bloodFlash = Camera.main.gameObject.AddComponent<BloodFlash> ();
+            bloodFlash.Initialize (m_bloodFlashMaterial);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
