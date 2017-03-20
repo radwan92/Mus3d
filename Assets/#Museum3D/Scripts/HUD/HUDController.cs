@@ -5,15 +5,40 @@ namespace Mus3d
 {
     public class HUDController : MonoBehaviour
     {
-        [SerializeField] SpriteRenderer m_weaponSprite;
+        [SerializeField] SpriteSheet    m_weaponSpriteSheet;
+        [SerializeField] SpriteRenderer m_weaponRenderer;
         [SerializeField] HUDNumber[]    m_hudNumbers;
 
         Dictionary<HUDNumber.Type, HUDNumber> m_hudNumbersByType;
+
+        Dictionary<Weapon.Type, int> m_weaponSpriteIndexByType = new Dictionary<Weapon.Type, int> ()
+        {
+            { Weapon.Type.Knife,        0 },
+            { Weapon.Type.Pistol,       1 },
+            { Weapon.Type.MachineGun,   2 },
+            { Weapon.Type.ChainGun,     3 },
+        };
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         void Start ()
         {
             InitializeHUDNumbers ();
+            InitializeWeaponDisplay ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void InitializeWeaponDisplay ()
+        {
+            m_weaponSpriteSheet.Initialize ();
+            Player.E_WeaponChanged += HandleWeaponChanged;
+            HandleWeaponChanged ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void HandleWeaponChanged ()
+        {
+            int spriteIndex = m_weaponSpriteIndexByType[Player.HeldWeaponType];
+            m_weaponRenderer.sprite = m_weaponSpriteSheet.GetSprite (spriteIndex, 0);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */

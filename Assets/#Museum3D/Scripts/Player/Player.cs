@@ -16,7 +16,8 @@ namespace Mus3d
         public static Vector3 Position  { get { return m_bodyTransform.position; } }
         public static Vector3 Forward   { get { return m_headTransform.forward; } }
 
-        public static Weapon.Class HeldWeaponClass { get { return m_weaponController.WeaponClass; } }
+        public static Weapon.Class HeldWeaponClass  { get { return m_weaponController.WeaponClass; } }
+        public static Weapon.Type  HeldWeaponType   { get { return m_weaponController.WeaponType; } }
 
         public static bool IsDead           { get; private set; }
         public static int  CurrentHealth    { get; private set; }

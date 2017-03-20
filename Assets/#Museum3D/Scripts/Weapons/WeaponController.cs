@@ -20,6 +20,12 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public Weapon.Type WeaponType
+        {
+            get { return m_weapon.Type_; }
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public void Initialize (SpriteRenderer weaponRenderer)
         {
             m_spriteRenderer = weaponRenderer;
@@ -76,7 +82,8 @@ namespace Mus3d
             m_weapon = weapon;
             m_anim.ChangeWeapon (m_weapon);
 
-            E_WeaponChanged (m_weapon);
+            if (E_WeaponChanged != null)
+                E_WeaponChanged (m_weapon);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
