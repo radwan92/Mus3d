@@ -4,7 +4,7 @@ namespace Mus3d
 {
     public class MovementController : MonoBehaviour
     {
-        [SerializeField] float m_speedMultiplier = 360f;
+        [SerializeField] float m_speedMultiplier = 120f;
 
         CharacterController m_controller;
         Transform           m_head;

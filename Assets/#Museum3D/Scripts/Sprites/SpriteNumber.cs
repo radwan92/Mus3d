@@ -35,8 +35,22 @@ namespace Mus3d
 
             for (int i = 0; i < m_digitCount; i++)
             {
-                int digit = i < digitIndex ? m_digitStorage[i] : 0;
-                m_digitRenderers[i].sprite = SpriteDigits.Get (digit);
+                if (i < digitIndex)
+                {
+                    int digit = m_digitStorage[i];
+                    m_digitRenderers[i].enabled = true;
+                    m_digitRenderers[i].sprite = SpriteDigits.Get (digit);
+                }
+                else
+                {
+                    m_digitRenderers[i].enabled = false;
+                }
+            }
+
+            if (digitIndex == 0)
+            {
+                m_digitRenderers[0].enabled = true;
+                m_digitRenderers[0].sprite = SpriteDigits.Get (0);
             }
         }
 

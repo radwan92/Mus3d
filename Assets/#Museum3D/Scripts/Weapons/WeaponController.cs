@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Mus3d
 {
     public class WeaponController : MonoBehaviour
     {
+        public event Action<Weapon> E_WeaponChanged;
+
         Weapon m_weapon;
 
         SpriteRenderer  m_spriteRenderer;
@@ -72,6 +75,8 @@ namespace Mus3d
 
             m_weapon = weapon;
             m_anim.ChangeWeapon (m_weapon);
+
+            E_WeaponChanged (m_weapon);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */

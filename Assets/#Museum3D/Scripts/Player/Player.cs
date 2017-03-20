@@ -5,6 +5,11 @@ namespace Mus3d
 {
     public static class Player
     {
+        public static event Action E_WeaponChanged;
+        public static event Action E_ScoreChanged;
+        public static event Action E_HealthChanged;
+        public static event Action E_LivesChanged;
+        public static event Action E_LevelChanged;
         public static event Action E_Died;
 
         public static Vector3 Velocity  { get { return m_characterController.velocity; } }
@@ -13,32 +18,30 @@ namespace Mus3d
 
         public static Weapon.Class HeldWeaponClass { get { return m_weaponController.WeaponClass; } }
 
-        public static bool IsDead { get; private set; }
+        public static bool IsDead           { get; private set; }
+        public static int  CurrentHealth    { get; private set; }
+        public static int  Lives            { get; private set; }
+        public static int  Score            { get; private set; }   // TODO: Handle score
+        public static int  Level            { get; private set; }
 
         static CharacterController  m_characterController;
         static WeaponController     m_weaponController;
         static Transform            m_headTransform;
         static Transform            m_bodyTransform;
-        static int                  m_currentHealth = 100;
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void Hit (int damage)
         {
-            // TODO: Handle this
-            //if (IsDead)
-            {
-                // TODO: Handle enemies state on player death
+            if (IsDead)
+                return;
 
-                //Debug.LogError ("Player got hit even though he's dead");
-                //return;
-            }
-
-            m_currentHealth -= damage;
+            CurrentHealth -= damage;
+            E_HealthChanged ();
 
             BloodFlash.Show ();
             // TODO: Handle death
 
-            if (m_currentHealth > 0)
+            if (CurrentHealth > 0)
                 return;
 
             Debug.Log ("PLAYER DIED");
@@ -46,6 +49,9 @@ namespace Mus3d
             // Death
             IsDead = true;
             //E_Died ();
+
+            Lives--;
+            //E_LivesChanged ();
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -55,12 +61,36 @@ namespace Mus3d
             m_weaponController    = weaponController;
             m_headTransform       = playerHeadTransform;
             m_bodyTransform       = playerBodyTransfom;
+
+            m_weaponController.E_WeaponChanged += HandleWeaponChanged;
+
+            CurrentHealth = 100;
+            Lives         = 1;
+            Level         = 1;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        static void HandleWeaponChanged (Weapon weapon)
+        {
+            E_WeaponChanged ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void Dispose ()
+        {
+            if (m_weaponController != null)
+                m_weaponController.E_WeaponChanged -= HandleWeaponChanged;
+
+            m_characterController = null;
+            m_weaponController    = null;
+            m_headTransform       = null;
+            m_bodyTransform       = null;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void AddHealth (int amount)
         {
-            m_currentHealth += amount;
+            CurrentHealth += amount;
         }
     }
 }
