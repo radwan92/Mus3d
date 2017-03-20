@@ -21,7 +21,8 @@ namespace Mus3d
         [Space]
         public int      PixelsPerUnit;
         public Vector2  Padding;
-        public Vector2  Pivot;
+        public Vector2  Offset;
+        public Vector2  Pivot       = new Vector2 (0.5f, 0.5f);
 
         [NonSerialized] bool m_isInitialized;
 
@@ -83,10 +84,10 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         Sprite CreateSprite (int x, int y)
         {
-            var xOffset = x * (SpriteWidth + (int)Padding.x);
-            var yOffset = Sheet.height - ((y + 1) * SpriteHeight + y * (int)Padding.y);
+            var xPosition = x * (SpriteWidth + (int)Padding.x) + Offset.x;
+            var yPosition = Sheet.height - ((y + 1) * SpriteHeight + y * (int)Padding.y + Offset.y);
 
-            var spriteRect = new Rect (xOffset, yOffset, SpriteWidth, SpriteHeight);
+            var spriteRect = new Rect (xPosition, yPosition, SpriteWidth, SpriteHeight);
 
             return Sprite.Create (Sheet, spriteRect, Pivot, PixelsPerUnit);
         }

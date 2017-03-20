@@ -5,15 +5,13 @@ namespace Mus3d
 {
     public class BloodFlash : MonoBehaviour
     {
-        [SerializeField] Material m_bloodFlashMatSource;
-
         static Material m_bloodFlashMat;
         static Sequence m_flashAnimation;
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void Awake ()
+        public void Initialize (Material sourceMaterial)
         {
-            m_bloodFlashMat       = new Material (m_bloodFlashMatSource);
+            m_bloodFlashMat       = new Material (sourceMaterial);
             m_bloodFlashMat.color = m_bloodFlashMat.color.WithAlpha (0f);
             m_flashAnimation      = DOTween.Sequence ();
 

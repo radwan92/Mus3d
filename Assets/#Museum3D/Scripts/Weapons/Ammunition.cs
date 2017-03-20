@@ -5,8 +5,9 @@ namespace Mus3d
 {
     public static class Ammunition
     {
-        public static event Action<Weapon> E_OutOfAmmo;
-        public static event Action E_BackToAmmo;
+        public static event Action          E_AmmoChanged;
+        public static event Action<Weapon>  E_OutOfAmmo;
+        public static event Action          E_BackToAmmo;
 
         static Dictionary<AmmoType, int> m_ammo = new Dictionary<AmmoType, int> ()
         {
@@ -39,12 +40,20 @@ namespace Mus3d
 
             if (hadNoAmmo)
                 E_BackToAmmo ();
+
+            E_AmmoChanged ();
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static int GetCount (Weapon weapon)
         {
             return m_ammo[weapon.AmmoType];
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static int GetCount ()
+        {
+            return m_ammo[AmmoType.Bullet];
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -62,6 +71,8 @@ namespace Mus3d
             {
                 E_OutOfAmmo (weapon);
             }
+
+            E_AmmoChanged ();
         }
     }
 }
