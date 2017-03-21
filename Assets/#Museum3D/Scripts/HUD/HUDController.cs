@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mus3d
 {
     public class HUDController : MonoBehaviour
     {
+        [SerializeField] SpriteSheet    m_faceSpriteSheet;
+        [SerializeField] SpriteRenderer m_faceSpriteRenderer;
         [SerializeField] SpriteSheet    m_weaponSpriteSheet;
         [SerializeField] SpriteRenderer m_weaponRenderer;
         [SerializeField] HUDNumber[]    m_hudNumbers;
@@ -19,11 +22,28 @@ namespace Mus3d
             { Weapon.Type.ChainGun,     3 },
         };
 
+        int[] m_faceSpriteRowByMinHealth = new int[] { 87, 74, 61, 48, 35, 22, 0 };
+        int m_currentFaceRow;
+
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         void Start ()
         {
             InitializeHUDNumbers ();
             InitializeWeaponDisplay ();
+            InitializeFaceDisplay ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void Update ()
+        {
+            // TODO: Face animation
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void InitializeFaceDisplay ()
+        {
+            m_faceSpriteSheet.Initialize ();
+            Player.E_HealthChanged += SetFaceAnimationRow;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -39,6 +59,22 @@ namespace Mus3d
         {
             int spriteIndex = m_weaponSpriteIndexByType[Player.HeldWeaponType];
             m_weaponRenderer.sprite = m_weaponSpriteSheet.GetSprite (spriteIndex, 0);
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void SetFaceAnimationRow ()
+        {
+            for (int i = 0; i < m_faceSpriteRowByMinHealth.Length; i++)
+            {
+                int minHealthForRow = m_faceSpriteRowByMinHealth[i];
+                if (Player.CurrentHealth > minHealthForRow)
+                {
+                    m_currentFaceRow = i;
+                    break;
+                }
+            }
+
+            m_faceSpriteRenderer.sprite = m_faceSpriteSheet.GetSprite (1, m_currentFaceRow);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
