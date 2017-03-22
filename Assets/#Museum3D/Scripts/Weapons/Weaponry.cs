@@ -47,9 +47,10 @@ namespace Mus3d
             var weaponType   = (Weapon.Type)weaponAsItem.Value;
             var pickedWeapon = Get (weaponType);
 
-            Ammunition.Add (pickedWeapon.AmmoType, pickedWeapon.StartingAmmo);
             bool wasAvailable = pickedWeapon.IsAvailable;
             pickedWeapon.IsAvailable = true;
+
+            Ammunition.Add (pickedWeapon.AmmoType, wasAvailable ? pickedWeapon.AdditionalAmmo : pickedWeapon.StartingAmmo);
 
             if (!wasAvailable)
             {

@@ -23,6 +23,7 @@ namespace Mus3d
         public Class        Class_;
         public AmmoType     AmmoType;
         public int          StartingAmmo;
+        public int          AdditionalAmmo;
         public SFX.Source   SoundSource;
         public bool         IsAvailable;
         public bool         IsRepeatable;
