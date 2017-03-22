@@ -174,6 +174,7 @@ namespace Mus3d
             if (Application.isPlaying)
             {
                 Destroy (m_ai);
+                Destroy (Enemy);
             }
         }
     }
