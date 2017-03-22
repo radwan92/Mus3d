@@ -65,8 +65,24 @@ namespace Mus3d
                 }
             }
 
+            bool playerYieldsMeleeWeapon = Player.HeldWeaponClass == Weapon.Class.Melee;
+
             if (smallestRangeScan != null)
             {
+                // Backstab!
+                if (playerYieldsMeleeWeapon && !smallestRangeScan.Enemy.IsAlert)
+                {
+                    var enemyToPlayerVect = EnemyToPlayerVect (smallestRangeScan.Enemy);
+                    var isBackstabbing    = Vector3.Dot (enemyToPlayerVect, smallestRangeScan.Enemy.Forward) > 0;
+
+                    if (isBackstabbing)
+                    {
+                        Debug.Log ("Backstab!");
+                        smallestRangeScan.Enemy.HandleGotHit (9999999);
+                        return;
+                    }
+                }
+
                 var damageRand = Random.Range (0, 256);
                 int damage = 0;
 
@@ -83,7 +99,7 @@ namespace Mus3d
                     smallestRangeScan.Enemy.HandleGotHit (damage);
             }
 
-            if (Player.HeldWeaponClass != Weapon.Class.Melee)
+            if (!playerYieldsMeleeWeapon)
                 ScanEnemiesShotHearing ();
         }
 

@@ -30,7 +30,8 @@ namespace Mus3d
         public float SightRangeSquare           { get; private set; }
         public float HearingRangeSquare         { get; private set; }
 
-        public bool IsDead { get; private set; }
+        public bool IsDead  { get; private set; }
+        public bool IsAlert { get { return m_ai.IsAlert; } }
 
         Transform m_bodyTransform;
 
