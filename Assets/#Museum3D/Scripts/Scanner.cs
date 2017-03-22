@@ -45,21 +45,22 @@ namespace Mus3d
                 if (!enemyScan.IsInRange || !enemyScan.IsInSight || enemyScan.Enemy.IsDead)
                     continue;
 
-                var playerToEnemyVect        = EnemyToPlayerVect (enemyScan.Enemy);
-                var playerToEnemyRangeSquare = playerToEnemyVect.sqrMagnitude;
+                var enemyToPlayerVect        = EnemyToPlayerVect (enemyScan.Enemy);
+                var enemyToPlayerRangeSquare = enemyToPlayerVect.sqrMagnitude;
 
-                if (playerToEnemyRangeSquare > weaponRangeSquare)
+                if (enemyToPlayerRangeSquare > weaponRangeSquare)
                     continue;
 
-                var enemyHitboxVect   = enemyScan.Enemy.HitboxBoundary;
+                var enemyHitboxVect    = enemyScan.Enemy.HitboxBoundary;
+                var hitboxToPlayerVect = enemyHitboxVect - Player.Position;
 
-                var maxAngle = Vector3.Angle (playerToEnemyVect, enemyHitboxVect);
-                var aimAngle = Vector3.Angle (Player.Forward.WithY (0f), playerToEnemyVect);
+                var maxAngle = Vector3.Angle (enemyToPlayerVect, hitboxToPlayerVect);
+                var aimAngle = Vector3.Angle (Player.Forward.WithY (0f), enemyToPlayerVect);
 
                 if (aimAngle <= maxAngle
-                    && playerToEnemyRangeSquare < smallestRangeSquare)
+                    && enemyToPlayerRangeSquare < smallestRangeSquare)
                 {
-                    smallestRangeSquare = playerToEnemyRangeSquare;
+                    smallestRangeSquare = enemyToPlayerRangeSquare;
                     smallestRangeScan   = enemyScan;
                 }
             }
