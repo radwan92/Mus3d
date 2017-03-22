@@ -19,6 +19,7 @@ namespace Mus3d
                 ItemType.Ammo,
                 item =>
                 {
+                    Sounds.Play (item.PickupSound);
                     Ammunition.Add (AmmoType.Bullet, item.Value);
                 }
             },
@@ -40,7 +41,18 @@ namespace Mus3d
                     FaceFlash.FlashColor (Color.green);
                     Player.AddHealth (item.Value);
                 }
+            },
+
+            /* ---------------------------------------------------------------------------------------------------------------------------------- */
+            {
+                ItemType.Treasure,
+                item =>
+                {
+                    Player.AddScore (item.Value);
+                }
             }
         };
+
+        
     }
 }

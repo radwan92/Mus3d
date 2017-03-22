@@ -13,6 +13,12 @@ namespace Mus3d
 
         static Dictionary<Weapon.Type, Weapon> m_weaponsByType = new Dictionary<Weapon.Type, Weapon> ();
 
+        static Dictionary<Weapon.Type, SFX.Source> m_soundByWeaponType = new Dictionary<Weapon.Type, SFX.Source> ()
+        {
+            { Weapon.Type.ChainGun, SFX.Source.MachineGunPickup },
+            { Weapon.Type.MachineGun, SFX.Source.ChainGunPickup }
+        };
+
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static Weapon Get (Weapon.Type weaponType)
         {
@@ -46,7 +52,10 @@ namespace Mus3d
             pickedWeapon.IsAvailable = true;
 
             if (!wasAvailable)
+            {
+                Sounds.Play (m_soundByWeaponType[weaponType]);
                 E_NewAvailable (pickedWeapon);
+            }
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */

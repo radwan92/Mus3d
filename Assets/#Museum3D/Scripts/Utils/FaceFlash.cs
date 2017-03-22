@@ -16,7 +16,7 @@ namespace Mus3d
             m_flashAnimation      = DOTween.Sequence ();
 
             m_flashAnimation.Append (m_faceFlashMat.DOFade (1f, 0.1f).SetAutoKill (false))
-                .Append (m_faceFlashMat.DOFade (0f, 0.5f).SetEase (Ease.OutCubic).SetAutoKill (false))
+                .Append (m_faceFlashMat.DOFade (0f, 0.35f).SetEase (Ease.OutCubic).SetAutoKill (false))
                 .SetAutoKill (false)
                 .Pause ();
         }

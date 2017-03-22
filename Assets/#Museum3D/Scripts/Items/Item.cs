@@ -6,7 +6,8 @@ namespace Mus3d
     {
         Ammo,
         Healing,
-        Weapon
+        Weapon,
+        Treasure
     }
 
     public class Item : ScriptableObject

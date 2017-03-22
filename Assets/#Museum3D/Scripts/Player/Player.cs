@@ -96,5 +96,12 @@ namespace Mus3d
             CurrentHealth += amount;
             E_HealthChanged ();
         }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void AddScore (int score)
+        {
+            Score += score;
+            E_ScoreChanged ();
+        }
     }
 }

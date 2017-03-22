@@ -12,7 +12,6 @@ namespace Mus3d
             if (!CanPickup (m_item))
                 return;
 
-            Sounds.Play (m_item.PickupSound);
             ItemEffects.Do (m_item);
             Destroy (gameObject);   // TODO: Pool those objects
         }

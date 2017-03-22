@@ -25,6 +25,7 @@ namespace Mus3d
         public float    AttackRangeOptimal  = 5f;
         public float    SightRange          = 12f;
         public float    HearingRange        = 6f;
+        public int      Score               = 100;
 
         public SpriteSheet              SpriteSheet;
         public EnemyAnimationDataSet[]  AnimationDataSet;

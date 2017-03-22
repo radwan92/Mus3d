@@ -30,9 +30,11 @@ namespace Mus3d
 
             for (int i = 0; i < m_hudRenderers.Length; i++)
             {
-                int index = i;
-                m_rendererColorGetters[i] = () => m_hudRenderers[index].color;
-                m_rendererColorSetter[i]  = color => m_hudRenderers[index].color = color;
+                var renderer = m_hudRenderers[i];
+                m_rendererColorGetters[i] = () => renderer.color;
+                m_rendererColorSetter[i]  = color => renderer.color = color;
+
+                renderer.color = renderer.color.WithAlpha (0f);
             }
         }
 

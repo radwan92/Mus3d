@@ -80,6 +80,7 @@ namespace Mus3d
         public void HandleDeath ()
         {
             Dropitems ();
+            Player.AddScore (Enemy.Score);
 
             // For body billboarding purposes
             var musObject = gameObject.AddComponent<MusObject> ();

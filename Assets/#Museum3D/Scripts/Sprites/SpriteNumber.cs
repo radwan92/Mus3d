@@ -9,7 +9,6 @@ namespace Mus3d
         SpriteRenderer[]    m_digitRenderers;
         Transform           m_tform;
         int                 m_digitCount;
-        int                 m_currentNumber;
 
         int[] m_digitStorage;
 
@@ -21,8 +20,6 @@ namespace Mus3d
                 Debug.LogErrorFormat (this, "Trying to set a number: {0} exceeding allowed number of digits: {1}", number, m_digitCount);
                 return;
             }
-
-            m_currentNumber = number;
 
             int digitIndex = 0;
             while (number > 0)
