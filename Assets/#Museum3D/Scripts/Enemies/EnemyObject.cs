@@ -51,7 +51,7 @@ namespace Mus3d
             else
             {
                 if (!m_ai.IsAlert)
-                    Scanner.ScanEnemyAlarmHearing (this);
+                    Scanner.ScanEnemyAlarmHearingNearEnemy (this);
 
                 m_ai.SetState (AiState.Type.Hit);
             }
@@ -72,7 +72,7 @@ namespace Mus3d
             if (m_ai.IsAlert)
                 return;
 
-            Scanner.ScanEnemyAlarmHearing (this);
+            Scanner.ScanEnemyAlarmHearingNearEnemy (this);
             Sounds.PlayRandom (Enemy.ShoutSounds);
             m_ai.SetState (AiState.Type.Chasing);
         }

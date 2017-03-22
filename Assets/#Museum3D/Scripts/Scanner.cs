@@ -77,7 +77,6 @@ namespace Mus3d
 
                     if (isBackstabbing)
                     {
-                        Debug.Log ("Backstab!");
                         smallestRangeScan.Enemy.HandleGotHit (9999999);
                         return;
                     }
@@ -138,7 +137,7 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        public static void ScanEnemyAlarmHearing (EnemyObject enemyObject)
+        public static void ScanEnemyAlarmHearingNearEnemy (EnemyObject enemyObject)
         {
             for (int i = 0; i < m_enemyScans.Count; i++)
             {

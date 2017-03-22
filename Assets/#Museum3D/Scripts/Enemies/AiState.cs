@@ -51,6 +51,7 @@ namespace Mus3d
             if (m_ai.HasNoticedPlayer ())
             {
                 Sounds.PlayRandom (m_enemy.ShoutSounds);
+                Scanner.ScanEnemyAlarmHearingNearEnemy (m_enemyObject);
 
                 if (m_ai.CanAttackPlayer ())
                     m_ai.SetState (Type.Attacking);
