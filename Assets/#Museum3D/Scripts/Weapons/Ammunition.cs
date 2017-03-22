@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Mus3d
 {
     public static class Ammunition
     {
+        public static readonly int MAX_AMMO = 99;
+
         public static event Action          E_AmmoChanged;
         public static event Action<Weapon>  E_OutOfAmmo;
         public static event Action          E_BackToAmmo;
@@ -37,6 +40,7 @@ namespace Mus3d
             }
 
             m_ammo[ammoType] += amount;
+            m_ammo[ammoType] = Mathf.Clamp (m_ammo[ammoType], -1, MAX_AMMO);
 
             if (hadNoAmmo)
                 E_BackToAmmo ();
@@ -54,6 +58,12 @@ namespace Mus3d
         public static int GetCount ()
         {
             return m_ammo[AmmoType.Bullet];
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static bool HasMax ()
+        {
+            return m_ammo[AmmoType.Bullet] == MAX_AMMO;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */

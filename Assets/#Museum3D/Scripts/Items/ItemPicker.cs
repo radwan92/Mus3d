@@ -5,7 +5,7 @@ namespace Mus3d
     public class ItemPicker : MonoBehaviour
     {
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void OnTriggerEnter (Collider collider)
+        void OnTriggerStay (Collider collider)
         {
             ItemObject foundObject = collider.GetComponent<ItemObject> ();
 

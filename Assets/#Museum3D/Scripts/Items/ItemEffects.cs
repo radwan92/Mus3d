@@ -37,6 +37,7 @@ namespace Mus3d
                 ItemType.Healing,
                 item =>
                 {
+                    FaceFlash.FlashColor (Color.green);
                     Player.AddHealth (item.Value);
                 }
             }

@@ -51,7 +51,7 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         void InitializeBloodFlash ()
         {
-            var bloodFlash = Camera.main.gameObject.AddComponent<BloodFlash> ();
+            var bloodFlash = Camera.main.gameObject.AddComponent<FaceFlash> ();
             bloodFlash.Initialize (m_bloodFlashMaterial);
         }
 

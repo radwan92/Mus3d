@@ -9,6 +9,9 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public void Pickup ()
         {
+            if (!CanPickup (m_item))
+                return;
+
             Sounds.Play (m_item.PickupSound);
             ItemEffects.Do (m_item);
             Destroy (gameObject);   // TODO: Pool those objects
@@ -27,6 +30,20 @@ namespace Mus3d
 #endif
 
             m_spriteRenderer.sprite = m_item.Sprite;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static bool CanPickup (Item item)
+        {
+            switch (item.Type)
+            {
+                case ItemType.Ammo:
+                    return !Ammunition.HasMax ();
+                case ItemType.Healing:
+                    return Player.CurrentHealth < Player.MAX_HEALTH;
+                default:
+                    return true;
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ namespace Mus3d
 {
     public static class Player
     {
+        public static readonly int MAX_HEALTH = 100;
+
         public static event Action E_WeaponChanged;
         public static event Action E_ScoreChanged;
         public static event Action E_HealthChanged;
@@ -39,7 +41,7 @@ namespace Mus3d
             CurrentHealth -= damage;
             E_HealthChanged ();
 
-            BloodFlash.Show ();
+            FaceFlash.FlashColor (Color.red);
             // TODO: Handle death
 
             if (CurrentHealth > 0)
@@ -65,7 +67,7 @@ namespace Mus3d
 
             m_weaponController.E_WeaponChanged += HandleWeaponChanged;
 
-            CurrentHealth = 100;
+            CurrentHealth = MAX_HEALTH;
             Lives         = 1;
             Level         = 1;
         }
@@ -92,6 +94,7 @@ namespace Mus3d
         public static void AddHealth (int amount)
         {
             CurrentHealth += amount;
+            E_HealthChanged ();
         }
     }
 }
