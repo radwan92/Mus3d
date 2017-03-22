@@ -39,6 +39,7 @@ namespace Mus3d
                 item =>
                 {
                     FaceFlash.FlashColor (Color.green);
+                    Sounds.Play (item.PickupSound);
                     Player.AddHealth (item.Value);
                 }
             },
@@ -48,6 +49,7 @@ namespace Mus3d
                 ItemType.Treasure,
                 item =>
                 {
+                    Sounds.Play (item.PickupSound);
                     Player.AddScore (item.Value);
                 }
             }

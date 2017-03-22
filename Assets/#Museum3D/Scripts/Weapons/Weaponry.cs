@@ -50,12 +50,17 @@ namespace Mus3d
             bool wasAvailable = pickedWeapon.IsAvailable;
             pickedWeapon.IsAvailable = true;
 
-            Ammunition.Add (pickedWeapon.AmmoType, wasAvailable ? pickedWeapon.AdditionalAmmo : pickedWeapon.StartingAmmo);
 
             if (!wasAvailable)
             {
-                Sounds.Play (m_soundByWeaponType[weaponType]);
+                Ammunition.Add (pickedWeapon.AmmoType, pickedWeapon.StartingAmmo);
+                Sounds.Play (weaponAsItem.PickupSound);
                 E_NewAvailable (pickedWeapon);
+            }
+            else
+            {
+                Ammunition.Add (pickedWeapon.AmmoType, pickedWeapon.AdditionalAmmo);
+                Sounds.Play (SFX.Source.AmmoPickup);
             }
         }
 
