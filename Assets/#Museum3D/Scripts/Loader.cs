@@ -45,6 +45,11 @@ namespace Mus3d
 
             // Load up stuff
 
+            var postRenderer = Camera.main.gameObject.AddComponent<PostRenderer> ();
+
+            var blackScreen = Camera.main.gameObject.AddComponent<BlackScreen> ();
+            blackScreen.Initialize ();
+
             var pak               = Instantiate (m_pak, transform);
             var musicInitializer  = pak.GetComponent<AudioInitializer> ();
             var playerInitializer = pak.GetComponent<PlayerInitializer> ();

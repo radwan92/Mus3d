@@ -19,6 +19,8 @@ namespace Mus3d
                 .Append (m_faceFlashMat.DOFade (0f, 0.35f).SetEase (Ease.OutCubic).SetAutoKill (false))
                 .SetAutoKill (false)
                 .Pause ();
+
+            PostRenderer.AddDraw (Render, 5);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -30,7 +32,7 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void OnPostRender ()
+        void Render ()
         {
             m_faceFlashMat.SetPass (0);
 
