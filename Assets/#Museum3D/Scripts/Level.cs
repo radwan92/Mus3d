@@ -2,7 +2,7 @@
 
 namespace Mus3d
 {
-    public class LevelManager : MonoBehaviour
+    public class Level : MonoBehaviour
     {
 
     }
