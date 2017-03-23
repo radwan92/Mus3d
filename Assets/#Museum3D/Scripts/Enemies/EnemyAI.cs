@@ -172,11 +172,6 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         void OnDestroy ()
         {
-            if (m_navAgent != null)
-                Destroy (m_navAgent);
-            if (m_collider != null)
-                Destroy (m_collider);
-
             if (m_statesByType != null && m_statesByType.ContainsKey (AiState.Type.Patroling))
                 ((IDisposable)m_statesByType[AiState.Type.Patroling]).Dispose ();
         }
