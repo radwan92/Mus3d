@@ -5,8 +5,10 @@ namespace Mus3d
     public class Loader : MonoBehaviour
     {
         [SerializeField] GameObject m_pak;
+        [SerializeField] GameObject m_menu;
 
         bool m_isLoading;
+        bool m_areGameComponentsInitialized;
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         void Awake ()
@@ -31,25 +33,48 @@ namespace Mus3d
                 return;
             m_isLoading = true;
 
-            // Dim the screen
-
-            // Move the cam to the spot
-
-            // Load up intro screen
-
-            // Undim
-
-            // Let player select the difficulty level / mission
-
-            // Dim
-
-            // Load up stuff
-
             var postRenderer = Camera.main.gameObject.AddComponent<PostRenderer> ();
-
-            var blackScreen = Camera.main.gameObject.AddComponent<BlackScreen> ();
+            var blackScreen  = Camera.main.gameObject.AddComponent<BlackScreen> ();
             blackScreen.Initialize ();
 
+            BlackScreen.E_FullBlack_OneShot += () =>
+            {
+                LoadMenu ();
+                BlackScreen.Hide ();
+            };
+            BlackScreen.Show ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void LoadMenu ()
+        {
+            var difficultyMenuGameObject = Instantiate (m_menu);
+            difficultyMenuGameObject.transform.position = Camera.main.transform.forward * 3f;
+            DifficultyMenu.E_DifficultySelected += HandleDifficultySet;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void HandleDifficultySet (Difficulty difficulty)
+        {
+            BlackScreen.E_FullBlack += () =>
+            {
+                DifficultyMenu.Hide ();
+                LoadGame ();
+                BlackScreen.Hide ();
+            };
+            BlackScreen.Show ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void LoadGame ()
+        {
+            if (!m_areGameComponentsInitialized)
+                LoadGameComponents ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void LoadGameComponents ()
+        {
             var pak               = Instantiate (m_pak, transform);
             var musicInitializer  = pak.GetComponent<AudioInitializer> ();
             var playerInitializer = pak.GetComponent<PlayerInitializer> ();
@@ -60,6 +85,8 @@ namespace Mus3d
             playerInitializer.Run ();
             enemyInitializer.Run ();
             hudInitializer.Run ();
+
+            m_areGameComponentsInitialized = true;
         }
     }
 }

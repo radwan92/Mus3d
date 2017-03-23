@@ -1,21 +1,12 @@
 ﻿using DG.Tweening;
-using System;
 using UnityEngine;
 
 namespace Mus3d
 {
-    public class BlackScreen : MonoBehaviour
+    public class GetPsyched
     {
-        public static event Action E_FullTransparent;
-        public static event Action E_FullBlack;
-        public static event Action E_FullTransparent_OneShot;
-        public static event Action E_FullBlack_OneShot;
-
-        [SerializeField] float m_fadeTime = 0.6f;
-
         static Material m_material;
         static Tweener  m_fade;
-        static State    m_state;
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public void Initialize ()
@@ -90,13 +81,6 @@ namespace Mus3d
                 GL.End ();
             }
             GL.PopMatrix ();
-        }
-
-        public enum State
-        {
-            None,
-            Showing,
-            Hiding
         }
     }
 }
