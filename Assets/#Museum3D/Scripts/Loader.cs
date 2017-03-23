@@ -6,6 +6,7 @@ namespace Mus3d
     {
         [SerializeField] GameObject m_pak;
         [SerializeField] GameObject m_menu;
+        [SerializeField] GameObject m_getPsychedController;
 
         bool m_isLoading;
         bool m_areGameComponentsInitialized;
@@ -39,18 +40,27 @@ namespace Mus3d
 
             BlackScreen.E_FullBlack_OneShot += () =>
             {
-                LoadMenu ();
+                InitializeMenu ();
+                InitializeGetPsyched ();
                 BlackScreen.Hide ();
             };
             BlackScreen.Show ();
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void LoadMenu ()
+        void InitializeMenu ()
         {
             var difficultyMenuGameObject = Instantiate (m_menu);
             difficultyMenuGameObject.transform.position = Camera.main.transform.forward * 3f;
             DifficultyMenu.E_DifficultySelected += HandleDifficultySet;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void InitializeGetPsyched ()
+        {
+            var getPsychedGameObject = Instantiate (m_getPsychedController);
+            var getPsyched           = getPsychedGameObject.GetComponent<GetPsyched> ();
+            getPsyched.Initialize ();
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -59,8 +69,11 @@ namespace Mus3d
             BlackScreen.E_FullBlack += () =>
             {
                 DifficultyMenu.Hide ();
-                LoadGame ();
-                BlackScreen.Hide ();
+
+                GetPsyched.Show ();
+
+                //LoadGame ();
+                //BlackScreen.Hide ();
             };
             BlackScreen.Show ();
         }
