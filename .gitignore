@@ -5,6 +5,8 @@
 /[Bb]uilds/
 /Assets/AssetStoreTools*
 /Assets/#Museum3D/Graphics/Sheets*
+/Assets/#Museum3D/Graphics/Fonts*
+/Assets/Plugins/Android/assets*
 /Assets/#Museum3D/Resources/SFX*
 /Assets/#Museum3D/Resources/BGM*
 /Assets/#Museum3D/Dependencies*
