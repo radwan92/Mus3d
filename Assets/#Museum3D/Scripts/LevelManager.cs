@@ -19,13 +19,21 @@ namespace Mus3d
             }
             m_isLevelLoaded = true;
 
-            GameObject.Instantiate (levelPrefab);
+            m_level = Object.Instantiate (levelPrefab);
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static Transform GetSpawnPoint ()
+        {
+            var spawnPoint = m_level.GetComponentInChildren<Spawn> ().transform;
+            return spawnPoint;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void UnloadLevel ()
         {
-            Destroy (m_level);
+            if (m_level != null)
+                Destroy (m_level);
 
             for (int i = 0; i < m_dynamicItems.Count; i++)
             {
@@ -36,6 +44,9 @@ namespace Mus3d
             }
 
             m_dynamicItems.Clear ();
+
+            m_level         = null;
+            m_isLevelLoaded = false;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */

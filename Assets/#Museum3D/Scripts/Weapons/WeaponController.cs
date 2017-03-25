@@ -13,6 +13,9 @@ namespace Mus3d
         WeaponAnim      m_anim;
         bool            m_isOutOfAmmo;
 
+        static bool s_isEnabled;
+        static WeaponController s_instance;
+
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public Weapon.Class WeaponClass
         {
@@ -28,6 +31,8 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public void Initialize (SpriteRenderer weaponRenderer)
         {
+            s_instance = this;
+
             m_spriteRenderer = weaponRenderer;
             m_anim           = new WeaponAnim (m_spriteRenderer);
 
@@ -111,6 +116,9 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         void Update ()
         {
+            if (!s_isEnabled)
+                return;
+
             if (Inp.GetDown (Inp.Key.A)
                 && Ammunition.HasFor (m_weapon))
             {
@@ -122,15 +130,28 @@ namespace Mus3d
                 m_anim.Stop ();
             }
 
-            if (Inp.GetDown (Inp.Key.LT))
+            if (Inp.GetDown (Inp.Key.LS))
             {
                 ChangeToPreviousWeapon ();
             }
 
-            if (Inp.GetDown (Inp.Key.RT))
+            if (Inp.GetDown (Inp.Key.RS))
             {
                 ChangeToNextWeapon ();
             }
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void Enable ()
+        {
+            s_isEnabled = true;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void Disable ()
+        {
+            s_isEnabled = false;
+            s_instance.m_anim.Stop ();
         }
     }
 }

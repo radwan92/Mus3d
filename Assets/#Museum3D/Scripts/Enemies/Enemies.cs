@@ -42,7 +42,7 @@ namespace Mus3d
                 m_enemiesByType.Add (enemy.Type_, enemy);
             }
 
-            E_Loaded ();
+            E_Loaded.InvokeIfNotNull ();
         }
     }
 }

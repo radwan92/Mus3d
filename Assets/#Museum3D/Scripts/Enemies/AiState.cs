@@ -543,7 +543,7 @@ namespace Mus3d
         {
             base.Enter ();
 
-            Sounds.PlayRandom (m_enemy.GotHitSounds);
+            Sounds.PlayRandomByChance (m_enemy.GotHitSounds, 35f);
 
             m_anim.SetState (EnemyAnimator.State.Hit, m_ai.EnemyToPlayerVector (), false);
 

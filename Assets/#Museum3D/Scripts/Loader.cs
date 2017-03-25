@@ -1,12 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Mus3d
 {
     public class Loader : MonoBehaviour
     {
+        public static event Action E_ShowingDifficultyMenu;
+
+        [SerializeField] Transform  m_levelPreviewPoint;
         [SerializeField] GameObject m_pak;
         [SerializeField] GameObject m_menu;
         [SerializeField] GameObject m_getPsychedController;
+        [SerializeField] GameObject m_level;
 
         bool m_isLoading;
         bool m_areGameComponentsInitialized;
@@ -21,8 +26,9 @@ namespace Mus3d
         void Update ()
         {
             // TODO: Change to the secret key combination
-            if (Input.GetKeyDown (KeyCode.P))
+            if (Inp.GetDown (Inp.Key.A))
             {
+                Debug.Log ("Loading...");
                 Load ();
             }
         }
@@ -34,41 +40,36 @@ namespace Mus3d
                 return;
             m_isLoading = true;
 
-            var postRenderer = Camera.main.gameObject.AddComponent<PostRenderer> ();
-            var blackScreen  = Camera.main.gameObject.AddComponent<BlackScreen> ();
-            blackScreen.Initialize ();
+            InitializePostRenderer ();
+            InitializeBlackScreen ();
+            InitializeDifficultyMenu ();
+            InitializeGetPsyched ();
 
+            Player.E_Died += HandlePlayerDeath;
+
+            ShowDifficultyMenu ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void ShowDifficultyMenu ()
+        {
             BlackScreen.E_FullBlack_OneShot += () =>
             {
-                InitializeMenu ();
-                InitializeGetPsyched ();
+                EnsureComponentsAreLoaded ();
+                Player.Recenter ();
+                Player.Spawn (m_levelPreviewPoint);
+                DifficultyMenu.Show ();
                 BlackScreen.Hide ();
             };
             BlackScreen.Show ();
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void InitializeMenu ()
+        void ShowGetPsychedScreen (Difficulty difficulty)
         {
-            var difficultyMenuGameObject = Instantiate (m_menu);
-            difficultyMenuGameObject.transform.position = Camera.main.transform.forward * 3f;
-            DifficultyMenu.E_DifficultySelected += HandleDifficultySet;
-        }
-
-        /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void InitializeGetPsyched ()
-        {
-            var getPsychedGameObject = Instantiate (m_getPsychedController);
-            var getPsyched           = getPsychedGameObject.GetComponent<GetPsyched> ();
-            getPsyched.Initialize ();
-            GetPsyched.E_Finished += HandleGetPsychedFinished;
-        }
-
-        /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void HandleDifficultySet (Difficulty difficulty)
-        {
-            BlackScreen.E_FullBlack += () =>
+            BlackScreen.E_FullBlack_OneShot += () =>
             {
+                Player.Recenter ();
                 DifficultyMenu.Hide ();
                 GetPsyched.Show ();
             };
@@ -76,14 +77,38 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void HandleGetPsychedFinished ()
+        void LoadLevel ()
         {
-            LoadGame ();
+            Player.Recenter ();
+            LevelManager.LoadLevel (m_level);
+            Player.Spawn (LevelManager.GetSpawnPoint ());
+            MovementController.Enable ();
+            WeaponController.Enable ();
+            HUDController.UnlockHUD ();
+            WeaponView.Show ();
             BlackScreen.Hide ();
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void LoadGame ()
+        void HandlePlayerDeath ()
+        {
+            MovementController.Disable ();
+            WeaponController.Disable ();
+
+            BlackScreen.E_FullBlack_OneShot += () =>
+            {
+                LevelManager.UnloadLevel ();
+                WeaponView.Hide ();
+                HUDController.LockHUD ();
+                Player.Reset ();
+                Ammunition.Reset ();
+                Weaponry.Reset ();
+            };
+            ShowDifficultyMenu ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void EnsureComponentsAreLoaded ()
         {
             if (!m_areGameComponentsInitialized)
                 LoadGameComponents ();
@@ -103,7 +128,43 @@ namespace Mus3d
             enemyInitializer.Run ();
             hudInitializer.Run ();
 
+            MovementController.Disable ();
+            WeaponController.Disable ();
+            WeaponView.Hide ();
+            HUDController.LockHUD ();
+
             m_areGameComponentsInitialized = true;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void InitializePostRenderer ()
+        {
+            var postRenderer = Camera.main.gameObject.AddComponent<PostRenderer> ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void InitializeBlackScreen ()
+        {
+            var blackScreen  = Camera.main.gameObject.AddComponent<BlackScreen> ();
+            blackScreen.Initialize ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void InitializeDifficultyMenu ()
+        {
+            var difficultyMenuGameObject = Instantiate (m_menu);
+            difficultyMenuGameObject.transform.position = Camera.main.transform.forward * 3f;
+            DifficultyMenu.Hide ();
+            DifficultyMenu.E_DifficultySelected += ShowGetPsychedScreen;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void InitializeGetPsyched ()
+        {
+            var getPsychedGameObject = Instantiate (m_getPsychedController);
+            var getPsyched           = getPsychedGameObject.GetComponent<GetPsyched> ();
+            getPsyched.Initialize ();
+            GetPsyched.E_Finished += LoadLevel;
         }
     }
 }

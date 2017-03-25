@@ -35,6 +35,7 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void Show ()
         {
+            UpdatePosition ();
             s_gameObject.SetActive (true);
         }
 
@@ -42,6 +43,15 @@ namespace Mus3d
         public static void Hide ()
         {
             s_gameObject.SetActive (false);
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        static void UpdatePosition ()
+        {
+            var tform               = s_gameObject.transform;
+            var cameraForwardNoY    = Player.Forward.WithY (0f).normalized;
+            tform.position          = Player.Position + cameraForwardNoY * 5f;
+            tform.rotation          = Quaternion.LookRotation (cameraForwardNoY);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */

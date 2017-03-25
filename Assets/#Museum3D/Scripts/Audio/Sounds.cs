@@ -38,6 +38,15 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void PlayRandomByChance (SFX.Source[] sources, float chance_percent)
+        {
+            var diceRoll = Random.Range (0f, 100f);
+
+            if (diceRoll <= chance_percent)
+                PlayRandom (sources);
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void Play (AudioClip clip)
         {
             AudioSource audioSource = null;

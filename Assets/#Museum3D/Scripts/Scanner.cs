@@ -105,6 +105,9 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void ScanEnemyToPlayerShot (EnemyObject enemyObject)
         {
+            if (Player.IsDead)
+                return;
+
             Vector3 playerToEnemyVector = - EnemyToPlayerVect (enemyObject);
             int     distance            = Mathf.CeilToInt (playerToEnemyVector.magnitude);
             bool    doesPlayerSeeEnemy  = Vector3.Angle (Player.Forward, playerToEnemyVector) < 45; // ~FOV 90

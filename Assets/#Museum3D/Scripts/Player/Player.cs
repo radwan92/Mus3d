@@ -24,38 +24,13 @@ namespace Mus3d
         public static bool IsDead           { get; private set; }
         public static int  CurrentHealth    { get; private set; }
         public static int  Lives            { get; private set; }
-        public static int  Score            { get; private set; }   // TODO: Handle score
+        public static int  Score            { get; private set; }
         public static int  Level            { get; private set; }
 
         static CharacterController  m_characterController;
         static WeaponController     m_weaponController;
         static Transform            m_headTransform;
         static Transform            m_bodyTransform;
-
-        /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        public static void Hit (int damage)
-        {
-            if (IsDead)
-                return;
-
-            CurrentHealth -= damage;
-            E_HealthChanged ();
-
-            FaceFlash.FlashColor (Color.red);
-            // TODO: Handle death
-
-            if (CurrentHealth > 0)
-                return;
-
-            Debug.Log ("PLAYER DIED");
-
-            // Death
-            IsDead = true;
-            //E_Died ();
-
-            Lives--;
-            //E_LivesChanged ();
-        }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void Initialize (CharacterController characterController, WeaponController weaponController, Transform playerBodyTransfom, Transform playerHeadTransform)
@@ -73,8 +48,60 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void Recenter ()
+        {
+            UnityEngine.VR.InputTracking.Recenter ();
+            DebugHeadController.Recenter ();
+            m_bodyTransform.rotation = Quaternion.identity;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void Spawn (Transform destination)
+        {
+            m_bodyTransform.position = destination.position;
+            m_bodyTransform.rotation = Quaternion.Euler (destination.eulerAngles.WithXZ (0f, 0f));
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void Hit (int damage)
+        {
+            if (IsDead)
+                return;
+
+            CurrentHealth -= damage;
+            E_HealthChanged ();
+
+            FaceFlash.FlashColor (Color.red);
+
+            if (CurrentHealth > 0)
+                return;
+
+            Lives--;
+            E_LivesChanged ();
+
+            IsDead = true;
+            E_Died ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void Reset ()
+        {
+            CurrentHealth = MAX_HEALTH;
+            Score         = 0;
+            IsDead        = false;
+            Lives         = 1;
+
+            E_HealthChanged ();
+            E_ScoreChanged ();
+            E_LivesChanged ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
         static void HandleWeaponChanged (Weapon weapon)
         {
+            if (IsDead)
+                return;
+
             E_WeaponChanged ();
         }
 
@@ -93,6 +120,9 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void AddHealth (int amount)
         {
+            if (IsDead)
+                return;
+
             CurrentHealth += amount;
             E_HealthChanged ();
         }
@@ -100,6 +130,9 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void AddScore (int score)
         {
+            if (IsDead)
+                return;
+
             Score += score;
             E_ScoreChanged ();
         }

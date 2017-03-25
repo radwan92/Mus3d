@@ -20,6 +20,18 @@ namespace Mus3d
         };
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void Reset ()
+        {
+            foreach (var weapon in m_weaponsByType.Values)
+                weapon.IsAvailable = false;
+
+            m_weaponsByType[Weapon.Type.Knife].IsAvailable  = true;
+            m_weaponsByType[Weapon.Type.Pistol].IsAvailable = true;
+
+            E_NewAvailable (GetBest ());
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static Weapon Get (Weapon.Type weaponType)
         {
             return m_weaponsByType[weaponType];

@@ -14,11 +14,16 @@ namespace Mus3d
         DOSetter<Color>[] m_rendererColorSetter;
 
         bool m_isShowingHUD;
+        bool m_isLocked = true;
+
+        static HUDController s_instance;
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void Start ()
+        public void Initialize ()
         {
             InitializeHUDRenderers ();
+
+            s_instance = this;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -41,10 +46,11 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         void Update ()
         {
-            if (Inp.GetDown (Inp.Key.Start))
-            {
+            if (m_isLocked)
+                return;
+
+            if (Inp.GetDown (Inp.Key.Y))
                 ToggleHUD ();
-            }
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -57,7 +63,9 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void ShowHUD ()
+        void ShowHUD () { ShowHUD (m_fadeTime); }
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void ShowHUD (float fadeTime )
         {
             if (m_isShowingHUD)
                 return;
@@ -68,7 +76,9 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void HideHUD ()
+        void HideHUD () { HideHUD (m_fadeTime); }
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void HideHUD (float fadeTime)
         {
             if (!m_isShowingHUD)
                 return;
@@ -76,6 +86,26 @@ namespace Mus3d
 
             for (int i = 0; i < m_hudRenderers.Length; i++)
                 DOTween.ToAlpha (m_rendererColorGetters[i], m_rendererColorSetter[i], 0f, m_fadeTime);
+        }
+
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void LockHUD ()
+        {
+            if (s_instance == null)
+                return;
+
+            s_instance.HideHUD (0f);
+            s_instance.m_isLocked = true;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static void UnlockHUD ()
+        {
+            if (s_instance == null)
+                return;
+
+            s_instance.m_isLocked = false;
         }
     }
 }

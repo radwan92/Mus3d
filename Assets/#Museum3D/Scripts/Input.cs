@@ -1,9 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Mus3d
 {
     public static class Inp
     {
+        public enum Axis
+        {
+            L_Horizontal,
+            L_Vertical,
+            R_Horizontal,
+            R_Vertical,
+            LT,
+            RT
+        }
+
         public enum Key
         {
             Up,
@@ -16,13 +27,21 @@ namespace Mus3d
             B,
             LS,
             RS,
-            LT,
-            RT,
             Start,
             Select
         }
 
+#if UNITY_EDITOR
         static IInp m_input = new KeyboardAndMouseInput ();
+#elif UNITY_ANDROID
+        static IInp m_input = new GearVrInput ();
+#endif
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static float Get (Axis axis)
+        {
+            return m_input.Get (axis);
+        }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static bool Get (Key key)
@@ -43,10 +62,110 @@ namespace Mus3d
         }
 
         /* ================================================================================================================================== */
+        // GEARVR
+        /* ================================================================================================================================== */
+        class GearVrInput : IInp
+        {
+            /* ---------------------------------------------------------------------------------------------------------------------------------- */
+            public float Get (Axis axis)
+            {
+                switch (axis)
+                {
+                    case Axis.L_Horizontal:
+                        return OVRInput.Get (OVRInput.Axis2D.PrimaryThumbstick).x;
+                    case Axis.L_Vertical:
+                        return OVRInput.Get (OVRInput.Axis2D.PrimaryThumbstick).y;
+                    case Axis.R_Horizontal:
+                        return OVRInput.Get (OVRInput.Axis2D.SecondaryThumbstick).x;
+                    case Axis.R_Vertical:
+                        return OVRInput.Get (OVRInput.Axis2D.SecondaryThumbstick).x;
+                    case Axis.LT:
+                        return OVRInput.Get (OVRInput.Axis1D.PrimaryIndexTrigger);
+                    case Axis.RT:
+                        return OVRInput.Get (OVRInput.Axis1D.SecondaryIndexTrigger);
+                    default:
+                        Debug.LogError ("Using unimplemented axis");
+                        return 0f;
+                }
+            }
+
+            /* ---------------------------------------------------------------------------------------------------------------------------------- */
+            public bool Get (Key key)
+            {
+                return OVRInput.Get (OvrButtonForKey (key));
+            }
+
+            /* ---------------------------------------------------------------------------------------------------------------------------------- */
+            public bool GetDown (Key key)
+            {
+                return OVRInput.GetDown (OvrButtonForKey (key));
+            }
+
+            /* ---------------------------------------------------------------------------------------------------------------------------------- */
+            public bool GetUp (Key key)
+            {
+                return OVRInput.GetUp (OvrButtonForKey (key));
+            }
+
+            /* ---------------------------------------------------------------------------------------------------------------------------------- */
+            OVRInput.Button OvrButtonForKey (Key key)
+            {
+                switch (key)
+                {
+                    case Key.Up:
+                        return OVRInput.Button.DpadUp;
+                    case Key.Down:
+                        return OVRInput.Button.DpadDown;
+                    case Key.Left:
+                        return OVRInput.Button.DpadLeft;
+                    case Key.Right:
+                        return OVRInput.Button.DpadRight;
+                    case Key.A:
+                        return OVRInput.Button.One;
+                    case Key.B:
+                        return OVRInput.Button.Two;
+                    case Key.X:
+                        return OVRInput.Button.Three;
+                    case Key.Y:
+                        return OVRInput.Button.Four;
+                    case Key.LS:
+                        return OVRInput.Button.PrimaryShoulder;
+                    case Key.RS:
+                        return OVRInput.Button.SecondaryShoulder;
+                    case Key.Start:
+                        return OVRInput.Button.Start;
+                    case Key.Select:
+                        return OVRInput.Button.Back;
+                }
+
+                return OVRInput.Button.None;
+            }
+        }
+
+        /* ================================================================================================================================== */
         // KEYBOARD
         /* ================================================================================================================================== */
         class KeyboardAndMouseInput : IInp
         {
+            /* ---------------------------------------------------------------------------------------------------------------------------------- */
+            public float Get (Axis axis)
+            {
+                switch (axis)
+                {
+                    case Axis.L_Horizontal:
+                        return Get (Key.Right) ? 1f : (Get (Key.Left) ? -1f : 0f);
+                    case Axis.L_Vertical:
+                        return Get (Key.Up) ? 1f : (Get (Key.Down) ? -1f : 0f);
+                    case Axis.R_Horizontal:
+                        return Input.GetAxis ("MouseX");
+                    case Axis.R_Vertical:
+                        return Input.GetAxis ("MouseY");
+                    default:
+                        Debug.LogError ("Using unimplemented axis");
+                        return 0f;
+                }
+            }
+
             /* ---------------------------------------------------------------------------------------------------------------------------------- */
             public bool Get (Key key)
             {
@@ -103,12 +222,8 @@ namespace Mus3d
                     case Key.Y:
                         return KeyCode.X;
                     case Key.LS:
-                        return KeyCode.Q;
-                    case Key.RS:
-                        return KeyCode.W;
-                    case Key.LT:
                         return KeyCode.Alpha1;
-                    case Key.RT:
+                    case Key.RS:
                         return KeyCode.Alpha2;
                     case Key.Start:
                         return KeyCode.Return;
@@ -124,6 +239,7 @@ namespace Mus3d
     public interface IInp
     {
         bool Get (Inp.Key key);
+        float Get (Inp.Axis axis);
         bool GetDown (Inp.Key key);
         bool GetUp (Inp.Key key);
     }

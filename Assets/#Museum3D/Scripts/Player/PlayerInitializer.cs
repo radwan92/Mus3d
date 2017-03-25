@@ -14,7 +14,6 @@ namespace Mus3d
         TransformBob        m_weaponBob;
 
         GameObject m_playerComponentsObject;
-        GameObject m_weaponViewObject;
 
         Transform m_playerBodyTransform;
         Transform m_playerHeadTransform;
@@ -28,11 +27,11 @@ namespace Mus3d
             m_playerComponentsObject = new GameObject ("PlayerComponents");
             m_playerComponentsObject.transform.SetParent (transform);
 
-            DebugRun ();
-
             m_characterController = FindObjectOfType<CharacterController> ();
             m_playerBodyTransform = m_characterController.transform;
             m_playerHeadTransform = Camera.main.transform;
+
+            DebugRun ();
 
             InitializeBloodFlash ();
             InitializeWeaponView ();
@@ -60,12 +59,12 @@ namespace Mus3d
         {
             var colliderObject = new GameObject ("Mus_PlayerCollider");
             colliderObject.transform.SetParent (m_playerBodyTransform);
+            colliderObject.transform.localPosition -= new Vector3 (0f, m_characterController.height * 0.5f, 0f);
             colliderObject.layer = LayerMask.NameToLayer (Consts.PLAYER_LAYER);
 
-            var playerCollider       = colliderObject.AddComponent<CapsuleCollider> ();
+            var playerCollider       = colliderObject.AddComponent<SphereCollider> ();
             playerCollider.radius    = m_characterController.radius;
             playerCollider.center    = m_characterController.center;
-            playerCollider.height    = m_characterController.height;
             playerCollider.isTrigger = true;
 
             var playerRigidBody = colliderObject.AddComponent<Rigidbody> ();
@@ -87,22 +86,14 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         private void InitializeWeaponController ()
         {
-            var weaponSpriteRenderer = m_weaponViewObject.GetComponent<SpriteRenderer> ();
-
             m_weaponController = m_playerComponentsObject.AddComponent<WeaponController> ();
-            m_weaponController.Initialize (weaponSpriteRenderer);
+            m_weaponController.Initialize (WeaponView.Renderer);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         private void InitializeWeaponView ()
         {
-            m_weaponViewObject = Instantiate (m_weaponViewPrefab);
-            m_weaponViewObject.transform.SetParent (m_playerHeadTransform);
-            m_weaponViewObject.transform.localPosition = new Vector3 (0f, 0f, 0.5f);
-            m_weaponViewObject.transform.localRotation = Quaternion.identity;
-
-            var weaponBob = m_weaponViewObject.GetComponent<TransformBob> ();
-            weaponBob.SetSpeedSource (() => Player.Velocity.sqrMagnitude);
+            WeaponView.Initialize (m_weaponViewPrefab, m_playerHeadTransform);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -110,7 +101,7 @@ namespace Mus3d
         void DebugRun ()
         {
             var debugHeadController = m_playerComponentsObject.AddComponent<DebugHeadController> ();
-            debugHeadController.Initialize (Camera.main.transform.parent);
+            debugHeadController.Initialize (m_playerBodyTransform);
         }
     }
 }

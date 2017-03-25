@@ -11,18 +11,18 @@ namespace Mus3d
         [SerializeField] Mesh       m_quadMesh;
         [SerializeField] Texture    m_getPsychedTexture;
         [SerializeField] Texture    m_loadingBarTexture;
+        [SerializeField] Shader     m_loadingBarShader;
 
-        static float    m_fadeTime = 0.8f;
-        static Material m_getPsychedMaterial;
-        static Tweener  m_getPsychedFade;
-        static Material m_loadingBarMaterial;
-        static Tweener  m_loadingBarFade;
-        static bool     m_shouldDraw;
+        static float        m_fadeTime = 0.8f;
+        static Material     m_getPsychedMaterial;
+        static Tweener      m_getPsychedFade;
+        static Material     m_loadingBarMaterial;
+        static Tweener      m_loadingBarFade;
+        static bool         m_shouldDraw;
+        static Transform    m_getPsychedTransform;
 
         Vector3   m_getPsychedScale;
         Vector3   m_loadingBarScale;
-        Transform m_getPsychedTransform;
-
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public void Initialize ()
@@ -38,14 +38,13 @@ namespace Mus3d
         void InitializeDrawingMaterials ()
         {
             var getPsychedShader = Shader.Find ("Unlit/Transparent Colored");
-            var loadingBarShader = Shader.Find ("Custom/LoadingBar");
 
             m_getPsychedMaterial             = new Material (getPsychedShader);
             m_getPsychedMaterial.mainTexture = m_getPsychedTexture;
             m_getPsychedMaterial.color       = Color.white.WithAlpha (0f);
             m_getPsychedFade                 = m_getPsychedMaterial.DOFade (1f, m_fadeTime).SetAutoKill (false).Pause ().OnRewind (HandleScreenFinished);
 
-            m_loadingBarMaterial             = new Material (loadingBarShader);
+            m_loadingBarMaterial             = new Material (m_loadingBarShader);
             m_loadingBarMaterial.color       = Color.white;
             m_loadingBarMaterial.mainTexture = m_loadingBarTexture;
         }
@@ -55,13 +54,17 @@ namespace Mus3d
         {
             var getPsychedGameObject       = new GameObject (GetType ().ToString ());
             m_getPsychedTransform          = getPsychedGameObject.transform;
-            var mainCameraTransform        = Camera.main.transform;
-            var cameraForwardNoY           = mainCameraTransform.forward.WithY (0f).normalized;
-            m_getPsychedTransform.position = mainCameraTransform.position + cameraForwardNoY * 3f;
-            m_getPsychedTransform.rotation = Quaternion.LookRotation (cameraForwardNoY);
 
             var textureRatio  = m_getPsychedTexture.width / m_getPsychedTexture.height;
             m_getPsychedScale = new Vector3 (textureRatio, 1f);
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        static void UpdateGetPsychedTransform ()
+        {
+            var cameraForwardNoY           = Player.Forward.WithY (0f).normalized;
+            m_getPsychedTransform.position = Player.Position + cameraForwardNoY * 4f;
+            m_getPsychedTransform.rotation = Quaternion.LookRotation (cameraForwardNoY);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -74,6 +77,8 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void Show ()
         {
+            UpdateGetPsychedTransform ();
+
             m_shouldDraw = true;
             m_getPsychedFade.PlayForward ();
             m_loadingBarMaterial.SetFloat ("_Progress", 0f);

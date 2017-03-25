@@ -137,18 +137,7 @@ namespace Mus3d
             if (m_ai == null)
                 m_ai = GetComponent<EnemyAI> ();
 
-            EditorAwake ();
-        }
-
-        /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        [Conditional("UNITY_EDITOR")]
-        void EditorAwake ()
-        {
-            if (Enemy == null)
-            {
-                Enemies.E_Loaded += Initialize;
-                return;
-            }
+            Initialize ();
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -171,6 +160,9 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         void OnDestroy ()
         {
+            Anim.Dispose ();
+            Scanner.RemoveEnemy (EnemyScan);
+
             if (Application.isPlaying)
             {
                 Destroy (Enemy);

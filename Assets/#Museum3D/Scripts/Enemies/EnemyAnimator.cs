@@ -121,7 +121,11 @@ namespace Mus3d
             while (!m_isDisposing)
             {
                 NextSpriteFrame ();
+
                 yield return m_animation.Interval;
+                if (m_isDisposing)
+                    break;
+
                 FireAnimationEvents ();
             }
         }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics;
+using UnityEngine;
 
 namespace Mus3d
 {
@@ -6,15 +7,22 @@ namespace Mus3d
     {
         [SerializeField][Range (0.1f, 1f)] float m_sensitivity = 0.4f;
 
-        bool        m_isOn;
-        Transform   m_headAnchor;
+        static Transform m_headAnchor;
 
+        bool m_isOn;
         Vector2 m_lastMousePosition;
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public void Initialize (Transform headAnchor)
         {
             m_headAnchor = headAnchor;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        [Conditional ("UNITY_EDITOR")]
+        public static void Recenter ()
+        {
+            m_headAnchor.rotation = Quaternion.identity;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */

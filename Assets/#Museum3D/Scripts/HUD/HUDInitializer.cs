@@ -12,7 +12,10 @@ namespace Mus3d
         {
             var spriteDigitsObject = Instantiate (m_spriteDigitsPrefab);
             spriteDigitsObject.GetComponent<SpriteDigits> ().Initialize ();
-            Instantiate (m_hudPrefab);
+
+            var hudObject     = Instantiate (m_hudPrefab);
+            var hudController = hudObject.GetComponentInChildren<HUDController> ();
+            hudController.Initialize ();
         }
     }
 }
