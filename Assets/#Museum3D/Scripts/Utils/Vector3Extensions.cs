@@ -19,6 +19,13 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        public static Vector3 WithYOffset (this Vector3 vector, float offset)
+        {
+            vector.y += offset;
+            return vector;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static Vector3 WithZ (this Vector3 vector, float z)
         {
             vector.z = z;

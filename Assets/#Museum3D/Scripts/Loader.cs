@@ -61,6 +61,7 @@ namespace Mus3d
             var getPsychedGameObject = Instantiate (m_getPsychedController);
             var getPsyched           = getPsychedGameObject.GetComponent<GetPsyched> ();
             getPsyched.Initialize ();
+            GetPsyched.E_Finished += HandleGetPsychedFinished;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -69,13 +70,16 @@ namespace Mus3d
             BlackScreen.E_FullBlack += () =>
             {
                 DifficultyMenu.Hide ();
-
                 GetPsyched.Show ();
-
-                //LoadGame ();
-                //BlackScreen.Hide ();
             };
             BlackScreen.Show ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void HandleGetPsychedFinished ()
+        {
+            LoadGame ();
+            BlackScreen.Hide ();
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
