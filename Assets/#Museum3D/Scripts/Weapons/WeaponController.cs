@@ -49,7 +49,7 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         void OnDrawGizmos ()
         {
-            Gizmos.DrawLine (Player.Position, Player.Position + Player.Forward * 20f);
+            Gizmos.DrawLine (Player.Position, Player.Position + Player.HeadForward * 20f);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */

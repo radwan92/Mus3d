@@ -14,9 +14,10 @@ namespace Mus3d
         public static event Action E_LevelChanged;
         public static event Action E_Died;
 
-        public static Vector3 Velocity  { get { return m_characterController.velocity; } }
-        public static Vector3 Position  { get { return m_bodyTransform.position; } }
-        public static Vector3 Forward   { get { return m_headTransform.forward; } }
+        public static Vector3 Velocity      { get { return m_characterController.velocity; } }
+        public static Vector3 Position      { get { return m_bodyTransform.position; } }
+        public static Vector3 HeadForward   { get { return m_headTransform.forward; } }
+        public static Vector3 BodyForward   { get { return m_bodyTransform.forward; } }
 
         public static Weapon.Class HeldWeaponClass  { get { return m_weaponController.WeaponClass; } }
         public static Weapon.Type  HeldWeaponType   { get { return m_weaponController.WeaponType; } }
@@ -50,9 +51,9 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void Recenter ()
         {
+            m_bodyTransform.rotation = Quaternion.identity;
             UnityEngine.VR.InputTracking.Recenter ();
             DebugHeadController.Recenter ();
-            m_bodyTransform.rotation = Quaternion.identity;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */

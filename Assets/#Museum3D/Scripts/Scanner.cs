@@ -55,7 +55,7 @@ namespace Mus3d
                 var hitboxToPlayerVect = enemyHitboxVect - Player.Position;
 
                 var maxAngle = Vector3.Angle (enemyToPlayerVect, hitboxToPlayerVect);
-                var aimAngle = Vector3.Angle (Player.Forward.WithY (0f), enemyToPlayerVect);
+                var aimAngle = Vector3.Angle (Player.HeadForward.WithY (0f), enemyToPlayerVect);
 
                 if (aimAngle <= maxAngle
                     && enemyToPlayerRangeSquare < smallestRangeSquare)
@@ -110,7 +110,7 @@ namespace Mus3d
 
             Vector3 playerToEnemyVector = - EnemyToPlayerVect (enemyObject);
             int     distance            = Mathf.CeilToInt (playerToEnemyVector.magnitude);
-            bool    doesPlayerSeeEnemy  = Vector3.Angle (Player.Forward, playerToEnemyVector) < 45; // ~FOV 90
+            bool    doesPlayerSeeEnemy  = Vector3.Angle (Player.HeadForward, playerToEnemyVector) < 45; // ~FOV 90
             bool    isPlayerMoving      = Player.Velocity.sqrMagnitude > 0.5f;  // TODO: Handle VR mode teleport-type movement
 
             var hitChance          = isPlayerMoving ? 160 : 256;
@@ -189,7 +189,7 @@ namespace Mus3d
                         continue;
 
                     var enemyToPlayerVect = EnemyToPlayerVect (enemyScan.Enemy);
-                    enemyScan.IsInSight = Vector3.Dot (Player.Forward, enemyToPlayerVect) > 0f;
+                    enemyScan.IsInSight = Vector3.Dot (Player.HeadForward, enemyToPlayerVect) > 0f;
                 }
 
                 yield return m_sightCheckInterval;

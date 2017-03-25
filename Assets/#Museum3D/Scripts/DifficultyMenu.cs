@@ -49,8 +49,8 @@ namespace Mus3d
         static void UpdatePosition ()
         {
             var tform               = s_gameObject.transform;
-            var cameraForwardNoY    = Player.Forward.WithY (0f).normalized;
-            tform.position          = Player.Position + cameraForwardNoY * 5f;
+            var cameraForwardNoY    = Player.BodyForward.WithY (0f).normalized;
+            tform.position          = Player.Position + cameraForwardNoY * 6.5f;
             tform.rotation          = Quaternion.LookRotation (cameraForwardNoY);
         }
 

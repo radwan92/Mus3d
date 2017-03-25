@@ -62,7 +62,7 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         static void UpdateGetPsychedTransform ()
         {
-            var cameraForwardNoY           = Player.Forward.WithY (0f).normalized;
+            var cameraForwardNoY           = Player.BodyForward.WithY (0f).normalized;
             m_getPsychedTransform.position = Player.Position + cameraForwardNoY * 4f;
             m_getPsychedTransform.rotation = Quaternion.LookRotation (cameraForwardNoY);
         }

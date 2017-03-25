@@ -42,10 +42,6 @@ namespace Mus3d
 
             InitializePostRenderer ();
             InitializeBlackScreen ();
-            InitializeDifficultyMenu ();
-            InitializeGetPsyched ();
-
-            Player.E_Died += HandlePlayerDeath;
 
             ShowDifficultyMenu ();
         }
@@ -132,6 +128,11 @@ namespace Mus3d
             WeaponController.Disable ();
             WeaponView.Hide ();
             HUDController.LockHUD ();
+
+            InitializeDifficultyMenu ();
+            InitializeGetPsyched ();
+
+            Player.E_Died += HandlePlayerDeath;
 
             m_areGameComponentsInitialized = true;
         }
