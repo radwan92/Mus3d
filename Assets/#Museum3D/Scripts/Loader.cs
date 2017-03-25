@@ -61,7 +61,7 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void ShowGetPsychedScreen (Difficulty difficulty)
+        void ShowGetPsychedScreen (Difficulty.Level difficulty)
         {
             BlackScreen.E_FullBlack_OneShot += () =>
             {
@@ -132,6 +132,7 @@ namespace Mus3d
             InitializeDifficultyMenu ();
             InitializeGetPsyched ();
 
+            Difficulty.Initialize ();
             Player.E_Died += HandlePlayerDeath;
 
             m_areGameComponentsInitialized = true;

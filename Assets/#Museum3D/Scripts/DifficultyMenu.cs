@@ -6,17 +6,12 @@ using System;
 namespace Mus3d
 {
     // TODO: Move to the appropriate place
-    public enum Difficulty
-    {
-        CanIDaddy      = 0,
-        DontHurtMe     = 1,
-        BringEmOn      = 2,
-        DeathIncarnate = 3
-    }
+    
+    
 
     public class DifficultyMenu : MonoBehaviour
     {
-        public static event Action<Difficulty> E_DifficultySelected;
+        public static event Action<Difficulty.Level> E_DifficultySelected;
 
         [SerializeField] Text[]     m_difficultyLabels;
         [SerializeField] Image      m_menuPistolImage;
@@ -28,9 +23,9 @@ namespace Mus3d
 
         static GameObject s_gameObject;
 
-        Difficulty  m_difficulty;
-        int         m_difficultyIndex;
-        bool        m_isLocked;
+        Difficulty.Level    m_difficulty;
+        int                 m_difficultyIndex;
+        bool                m_isLocked;
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void Show ()
@@ -58,7 +53,7 @@ namespace Mus3d
         void Awake ()
         {
             s_gameObject = gameObject;
-            SetDifficulty (Difficulty.BringEmOn);
+            SetDifficulty (Difficulty.Level.BringEmOn);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -91,7 +86,7 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void SetDifficulty (Difficulty difficulty)
+        void SetDifficulty (Difficulty.Level difficulty)
         {
             m_difficultyLabels[m_difficultyIndex].color = m_baseTextColor;
 
@@ -110,7 +105,7 @@ namespace Mus3d
         void SetNextDifficulty ()
         {
             var difficultyIndex = (m_difficultyIndex + 1) % m_difficultyLabels.Length;
-            SetDifficulty ((Difficulty)difficultyIndex);
+            SetDifficulty ((Difficulty.Level)difficultyIndex);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -121,7 +116,7 @@ namespace Mus3d
             if (difficultyIndex < 0)
                 difficultyIndex = m_difficultyLabels.Length - 1;
 
-            SetDifficulty ((Difficulty)difficultyIndex);
+            SetDifficulty ((Difficulty.Level)difficultyIndex);
         }
     }
 }

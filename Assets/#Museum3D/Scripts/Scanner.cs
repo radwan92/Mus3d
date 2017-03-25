@@ -87,9 +87,9 @@ namespace Mus3d
 
                 int damageRandByTwelve;
 
-                if (smallestRangeSquare < 4)
+                if (smallestRangeSquare < 16)
                     damage = damageRand / 4;
-                else if (smallestRangeSquare < 16)
+                else if (smallestRangeSquare < 36)
                     damage = damageRand / 6;
                 else if (((damageRandByTwelve = (damageRand / 12)) > 0) && (damageRandByTwelve * damageRandByTwelve) > smallestRangeSquare)
                     damage = damageRand / 6;
@@ -108,14 +108,15 @@ namespace Mus3d
             if (Player.IsDead)
                 return;
 
-            Vector3 playerToEnemyVector = - EnemyToPlayerVect (enemyObject);
+            Vector3 playerToEnemyVector = -EnemyToPlayerVect (enemyObject);
             int     distance            = Mathf.CeilToInt (playerToEnemyVector.magnitude);
             bool    doesPlayerSeeEnemy  = Vector3.Angle (Player.HeadForward, playerToEnemyVector) < 45; // ~FOV 90
-            bool    isPlayerMoving      = Player.Velocity.sqrMagnitude > 0.5f;  // TODO: Handle VR mode teleport-type movement
+            bool    isPlayerMoving      = Player.Velocity.sqrMagnitude > 0.5f;
 
             var hitChance          = isPlayerMoving ? 160 : 256;
             var distanceMultiplier = doesPlayerSeeEnemy ? 16 : 8;
             hitChance             -= distance * distanceMultiplier;
+            hitChance             = (int)(hitChance * Difficulty.EnemyShotChanceMultiplier);
 
             var hitRand = Random.Range (0, 256); // [0, 255]
 
@@ -126,12 +127,14 @@ namespace Mus3d
             var damageRand = Random.Range (0, 256);
             int damage = 0;
 
-            if (distance < 2)
+            if (distance < 4f)
                 damage = damageRand / 4;
-            else if (distance < 4)
+            else if (distance < 8f)
                 damage = damageRand / 8;
-            else if (distance < 8)
+            else if (distance < 14f)
                 damage = damageRand / 16;
+
+            damage = (int)(damage * Difficulty.PlayerDamageTakenMultiplier);
 
             if (damage <= 0)
                 return;

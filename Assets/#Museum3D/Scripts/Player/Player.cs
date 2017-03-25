@@ -32,6 +32,7 @@ namespace Mus3d
         static WeaponController     m_weaponController;
         static Transform            m_headTransform;
         static Transform            m_bodyTransform;
+        
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void Initialize (CharacterController characterController, WeaponController weaponController, Transform playerBodyTransfom, Transform playerHeadTransform)
@@ -124,7 +125,7 @@ namespace Mus3d
             if (IsDead)
                 return;
 
-            CurrentHealth += amount;
+            CurrentHealth = Mathf.Clamp (CurrentHealth + amount, 0, MAX_HEALTH);
             E_HealthChanged ();
         }
 
