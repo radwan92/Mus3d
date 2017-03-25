@@ -73,7 +73,7 @@ namespace Mus3d
             CurrentHealth -= damage;
             E_HealthChanged ();
 
-            FaceFlash.FlashColor (Color.red);
+            FaceFlash.FlashColor (Color.red, FaceFlash.Visual.Noise);
 
             if (CurrentHealth > 0)
                 return;

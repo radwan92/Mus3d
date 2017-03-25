@@ -10,6 +10,7 @@ namespace Mus3d
         [SerializeField] Transform  m_levelPreviewPoint;
         [SerializeField] GameObject m_pak;
         [SerializeField] GameObject m_menu;
+        [SerializeField] GameObject m_faceFlash;
         [SerializeField] GameObject m_getPsychedController;
         [SerializeField] GameObject m_level;
 
@@ -55,6 +56,8 @@ namespace Mus3d
                 Player.Recenter ();
                 Player.Spawn (m_levelPreviewPoint);
                 DifficultyMenu.Show ();
+
+                BlackScreen.E_FullTransparent_OneShot += TitleText.Show;
                 BlackScreen.Hide ();
             };
             BlackScreen.Show ();
@@ -66,6 +69,7 @@ namespace Mus3d
             BlackScreen.E_FullBlack_OneShot += () =>
             {
                 Player.Recenter ();
+                TitleText.Hide ();
                 DifficultyMenu.Hide ();
                 GetPsyched.Show ();
             };
@@ -129,8 +133,9 @@ namespace Mus3d
             WeaponView.Hide ();
             HUDController.LockHUD ();
 
-            InitializeDifficultyMenu ();
+            InitializeMainMenu ();
             InitializeGetPsyched ();
+            InitializeFaceFlash ();
 
             Difficulty.Initialize ();
             Player.E_Died += HandlePlayerDeath;
@@ -152,12 +157,15 @@ namespace Mus3d
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        void InitializeDifficultyMenu ()
+        void InitializeMainMenu ()
         {
             var difficultyMenuGameObject = Instantiate (m_menu);
             difficultyMenuGameObject.transform.position = Camera.main.transform.forward * 3f;
             DifficultyMenu.Hide ();
             DifficultyMenu.E_DifficultySelected += ShowGetPsychedScreen;
+
+            var titleText = difficultyMenuGameObject.GetComponentInChildren<TitleText> ();
+            TitleText.Initialize (titleText);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -167,6 +175,15 @@ namespace Mus3d
             var getPsyched           = getPsychedGameObject.GetComponent<GetPsyched> ();
             getPsyched.Initialize ();
             GetPsyched.E_Finished += LoadLevel;
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void InitializeFaceFlash ()
+        {
+            var faceFlashObject = Instantiate (m_faceFlash);
+            var faceFlash       = faceFlashObject.GetComponent<FaceFlash> ();
+
+            faceFlash.Initialize ();
         }
     }
 }

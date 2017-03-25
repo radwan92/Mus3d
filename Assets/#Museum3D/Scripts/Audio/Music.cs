@@ -9,8 +9,9 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public void Initialize ()
         {
-            m_audio = gameObject.AddComponent<AudioSource> ();
-            m_audio.loop = true;
+            m_audio        = gameObject.AddComponent<AudioSource> ();
+            m_audio.volume = 0.7f;
+            m_audio.loop   = true;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
