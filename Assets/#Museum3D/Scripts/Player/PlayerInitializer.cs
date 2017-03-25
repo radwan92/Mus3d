@@ -79,8 +79,9 @@ namespace Mus3d
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         private void InitializeMovementController ()
         {
+            // TODO: Disable moving by tapping for gvr
             m_movementController = m_playerComponentsObject.AddComponent<MovementController> ();
-            m_movementController.Initialize (FindObjectOfType<CharacterController> (), m_playerHeadTransform);    // Disable moving by tapping for gvr
+            m_movementController.Initialize (FindObjectOfType<CharacterController> (), m_playerHeadTransform, m_playerBodyTransform);
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */

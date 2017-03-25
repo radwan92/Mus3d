@@ -4,18 +4,24 @@ namespace Mus3d
 {
     public class MovementController : MonoBehaviour
     {
-        [SerializeField] float m_speedMultiplier = 360f;
+        [SerializeField] float m_speedMultiplier = 3.5f;
+        [SerializeField] float m_rotationAngle = 45f;
 
         CharacterController m_controller;
         Transform           m_head;
+        Transform           m_body;
+
+        bool m_hasRotatedLeft;
+        bool m_hasRotatedRight;
 
         static bool s_isEnabled;
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
-        public void Initialize (CharacterController characterController, Transform head)
+        public void Initialize (CharacterController characterController, Transform head, Transform body)
         {
             m_controller = characterController;
             m_head       = head;
+            m_body       = body;
         }
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -36,6 +42,46 @@ namespace Mus3d
             if (!s_isEnabled)
                 return;
 
+            HandleMovementInput ();
+            HandleRotationInput ();
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void HandleRotationInput ()
+        {
+            float rtValue = Inp.Get (Inp.Axis.RT);
+            float ltValue = Inp.Get (Inp.Axis.LT);
+
+            if (ltValue > 0.5f)
+            {
+                if (!m_hasRotatedLeft)
+                {
+                    m_hasRotatedLeft = true;
+                    m_body.Rotate (Vector3.up, -m_rotationAngle, Space.World);
+                }
+            }
+            else if (ltValue < 0.3f)
+            {
+                m_hasRotatedLeft = false;
+            }
+
+            if (rtValue > 0.5f)
+            {
+                if (!m_hasRotatedRight)
+                {
+                    m_hasRotatedRight = true;
+                    m_body.Rotate (Vector3.up, m_rotationAngle, Space.World);
+                }
+            }
+            else if (rtValue < 0.3f)
+            {
+                m_hasRotatedRight = false;
+            }
+        }
+
+        /* ---------------------------------------------------------------------------------------------------------------------------------- */
+        void HandleMovementInput ()
+        {
             float movX = 0f;
             float movY = 0f;
 
@@ -55,7 +101,7 @@ namespace Mus3d
             var forward = m_head.forward.WithY (0f);
             var right   = m_head.right.WithY (0f);
             var movementVector = (forward * movY + right * movX).normalized;
-            m_controller.SimpleMove (movementVector * Time.deltaTime * m_speedMultiplier);
+            m_controller.SimpleMove (movementVector * m_speedMultiplier);
         }
     }
 }

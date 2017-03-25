@@ -160,6 +160,10 @@ namespace Mus3d
                         return Input.GetAxis ("MouseX");
                     case Axis.R_Vertical:
                         return Input.GetAxis ("MouseY");
+                    case Axis.LT:
+                        return Input.GetKey (KeyCode.Q) ? 1f : 0f;
+                    case Axis.RT:
+                        return Input.GetKey (KeyCode.E) ? 1f : 0f;
                     default:
                         Debug.LogError ("Using unimplemented axis");
                         return 0f;
