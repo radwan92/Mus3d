@@ -5,7 +5,7 @@ namespace Mus3d
 {
     public static class SFX
     {
-        // 31
+        // 32
         public enum Source
         {
             Knife = 0, Pistol = 1, MachineGun = 2, ChainGun = 3,
@@ -15,7 +15,8 @@ namespace Mus3d
             SSShout1 = 16, SSShout2 = 29, SSShout3 = 31, SSAttack1 = 17, SSDeath1 = 19,
             OfficerShout1 = 20, OfficerShout2 = 30, OfficerDeath1 = 21, OfficerDeath2 = 22,
             HoundDeath1 = 18, HoundShout1 = 23,
-            GenericDeath1 = 26, GenericDeath2 = 27, GenericDeath3 = 28
+            GenericDeath1 = 26, GenericDeath2 = 27, GenericDeath3 = 28,
+            Explosion1 = 32
 
         }
 
@@ -54,8 +55,8 @@ namespace Mus3d
             { "7", Source.SSShout1 }, { "23", Source.SSShout2 }, { "37", Source.SSShout3 }, { "11", Source.SSAttack1 }, { "17", Source.SSDeath1 },
             { "18", Source.OfficerShout1 }, { "27", Source.OfficerShout2 }, { "19", Source.OfficerDeath1 }, { "20", Source.OfficerDeath2 },
             { "16", Source.HoundDeath1 }, { "29", Source.HoundShout1 },
-            { "40", Source.GenericDeath1 }, { "41", Source.GenericDeath2 }, { "42", Source.GenericDeath3 }
-
+            { "40", Source.GenericDeath1 }, { "41", Source.GenericDeath2 }, { "42", Source.GenericDeath3 },
+            { "53", Source.Explosion1 }
         };
     }
 }

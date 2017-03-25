@@ -17,8 +17,8 @@ namespace Mus3d
         [SerializeField] Vector3 m_museumFinalPosition;
         [SerializeField] Vector3 m_3dFinalPosition;
 
-        static TitleText s_instance;
-        static Sequence s_anim;
+        static TitleText    s_instance;
+        static Sequence     s_anim;
 
         /* ---------------------------------------------------------------------------------------------------------------------------------- */
         public static void Initialize (TitleText instance)
@@ -29,22 +29,25 @@ namespace Mus3d
                 .SetAutoKill (false)
                 .Pause ()
                 .SetDelay (1.5f)
-                .OnPlay (() =>
+                .AppendCallback (() =>
                 {
                     DOTween.To (() => s_instance.m_superCanvasGroup.alpha, alpha => s_instance.m_superCanvasGroup.alpha = alpha, 1f, 0.8f);
                     FaceFlash.FlashColor (Color.white, FaceFlash.Visual.Full);
+                    Sounds.Play (SFX.Source.Explosion1);
                 })
                 .Append (s_instance.m_super.DOLocalMove (s_instance.m_superFinalPosition, 1.5f).SetEase (Ease.OutBounce))
                 .AppendCallback (() =>
                 {
                     DOTween.To (() => s_instance.m_museumCanvasGroup.alpha, alpha => s_instance.m_museumCanvasGroup.alpha = alpha, 1f, 0.8f);
                     FaceFlash.FlashColor (Color.white, FaceFlash.Visual.Full);
+                    Sounds.Play (SFX.Source.Explosion1);
                 })
                 .Append (s_instance.m_museum.DOLocalMove (s_instance.m_museumFinalPosition, 1.5f).SetEase (Ease.OutElastic))
                 .AppendCallback (() =>
                 {
                     DOTween.To (() => s_instance.m_3dCanvasGroup.alpha, alpha => s_instance.m_3dCanvasGroup.alpha = alpha, 1f, 0.8f);
                     FaceFlash.FlashColor (Color.white, FaceFlash.Visual.Full);
+                    Sounds.Play (SFX.Source.Explosion1);
                 })
                 .Append (s_instance.m_3d.DOLocalMove (s_instance.m_3dFinalPosition, 1.5f).SetEase (Ease.OutBack));
         }
