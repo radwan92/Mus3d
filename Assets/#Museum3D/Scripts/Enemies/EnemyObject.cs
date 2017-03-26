@@ -112,7 +112,7 @@ namespace Mus3d
                     continue;
 
                 var dropAngle    = UnityEngine.Random.Range (0f, Mathf.PI * 2f);
-                var dropPosition = new Vector3 (Mathf.Cos (dropAngle), dropYPosition, Mathf.Sin (dropAngle)) * ITEM_DROP_RADIUS + Position;
+                var dropPosition = (new Vector3 (Mathf.Cos (dropAngle), 0f, Mathf.Sin (dropAngle)) * ITEM_DROP_RADIUS + Position).WithY (dropYPosition);
 
                 var dropObject = LevelManager.Instantiate (drops[i].ItemObjectPrefab, Position.WithY (dropYPosition), Quaternion.identity);
                 dropObject.transform.DOJump (dropPosition, 0.3f, 1, 0.5f).SetEase (Ease.Flash);
