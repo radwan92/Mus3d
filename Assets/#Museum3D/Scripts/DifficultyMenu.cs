@@ -53,6 +53,10 @@ namespace Mus3d
         void Awake ()
         {
             s_gameObject = gameObject;
+
+            for (int i = 0; i < m_difficultyLabels.Length; i++)
+                m_difficultyLabels[i].color = m_baseTextColor;
+
             SetDifficulty (Difficulty.Level.BringEmOn);
         }
 
